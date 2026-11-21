@@ -17,6 +17,7 @@ android {
         minSdk = Integer.parseInt(libs.versions.android.sdk.min.get())
         targetSdk = Integer.parseInt(libs.versions.android.sdk.target.get())
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments["clearPackageData"] = "true"
 
         base.archivesName.set("${parent?.name}-$versionName")
     }
@@ -32,6 +33,9 @@ android {
     }
 
     buildTypes {
+        getByName("debug") {
+            applicationIdSuffix = ".qa"
+        }
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -64,6 +68,10 @@ android {
         compose = true
     }
 
+    testOptions {
+        execution = "ANDROIDX_TEST_ORCHESTRATOR"
+    }
+
     packaging {
         resources.excludes.apply {
             add("META-INF/AL2.0")
@@ -83,6 +91,12 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.koin.core)
+    androidTestImplementation(libs.test.junit)
+    androidTestImplementation(libs.test.junit4.android)
+    androidTestImplementation(libs.test.uiautomator)
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestUtil("androidx.test:orchestrator:1.5.1")
 }
 
 fun readProperties(propertiesFile: File) = Properties().apply {

@@ -17,7 +17,7 @@ internal class TaskRepositoryFake : TaskRepository {
             task.id
         }
 
-        taskMap[id] = task
+        taskMap[id] = task.copy(id = id)
         return id
     }
 

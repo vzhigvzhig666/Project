@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UpdateTaskCategoryImpl.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">domain</a> &gt; <a href="index.source.html" class="el_package">com.escodro.domain.usecase.task.implementation</a> &gt; <span class="el_source">UpdateTaskCategoryImpl.kt</span></div><h1>UpdateTaskCategoryImpl.kt</h1><pre class="source lang-java linenums">package com.escodro.domain.usecase.task.implementation
+
+import com.escodro.domain.usecase.task.LoadTask
+import com.escodro.domain.usecase.task.UpdateTask
+import com.escodro.domain.usecase.task.UpdateTaskCategory
+
+<span class="fc" id="L7">internal class UpdateTaskCategoryImpl(</span>
+<span class="fc" id="L8">    private val loadTask: LoadTask,</span>
+<span class="fc" id="L9">    private val updateTask: UpdateTask,</span>
+) : UpdateTaskCategory {
+
+    override suspend fun invoke(taskId: Long, categoryId: Long?) {
+<span class="pc bpc" id="L13" title="1 of 2 branches missed.">        val task = loadTask(taskId) ?: return</span>
+<span class="fc" id="L14">        val updatedTask = task.copy(categoryId = categoryId)</span>
+<span class="fc" id="L15">        updateTask(updatedTask)</span>
+<span class="fc" id="L16">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

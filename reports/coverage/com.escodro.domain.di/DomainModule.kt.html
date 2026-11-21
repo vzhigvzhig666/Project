@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>DomainModule.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">domain</a> &gt; <a href="index.source.html" class="el_package">com.escodro.domain.di</a> &gt; <span class="el_source">DomainModule.kt</span></div><h1>DomainModule.kt</h1><pre class="source lang-java linenums">package com.escodro.domain.di
+
+import com.escodro.domain.provider.DateTimeProvider
+import com.escodro.domain.provider.DateTimeProviderImpl
+import com.escodro.domain.usecase.alarm.CancelAlarm
+import com.escodro.domain.usecase.alarm.RescheduleFutureAlarms
+import com.escodro.domain.usecase.alarm.ScheduleAlarm
+import com.escodro.domain.usecase.alarm.ScheduleNextAlarm
+import com.escodro.domain.usecase.alarm.ShowAlarm
+import com.escodro.domain.usecase.alarm.SnoozeAlarm
+import com.escodro.domain.usecase.alarm.UpdateAlarm
+import com.escodro.domain.usecase.alarm.UpdateTaskAsRepeating
+import com.escodro.domain.usecase.alarm.implementation.CancelAlarmImpl
+import com.escodro.domain.usecase.alarm.implementation.ScheduleAlarmImpl
+import com.escodro.domain.usecase.alarm.implementation.UpdateAlarmImpl
+import com.escodro.domain.usecase.alarm.implementation.UpdateTaskAsRepeatingImpl
+import com.escodro.domain.usecase.category.AddCategory
+import com.escodro.domain.usecase.category.DeleteCategory
+import com.escodro.domain.usecase.category.LoadAllCategories
+import com.escodro.domain.usecase.category.LoadCategory
+import com.escodro.domain.usecase.category.UpdateCategory
+import com.escodro.domain.usecase.category.implementation.AddCategoryImpl
+import com.escodro.domain.usecase.category.implementation.DeleteCategoryImpl
+import com.escodro.domain.usecase.category.implementation.LoadAllCategoriesImpl
+import com.escodro.domain.usecase.category.implementation.LoadCategoryImpl
+import com.escodro.domain.usecase.category.implementation.UpdateCategoryImpl
+import com.escodro.domain.usecase.preferences.LoadAppTheme
+import com.escodro.domain.usecase.preferences.UpdateAppTheme
+import com.escodro.domain.usecase.search.SearchTasksByName
+import com.escodro.domain.usecase.search.implementation.SearchTasksByNameImpl
+import com.escodro.domain.usecase.task.AddTask
+import com.escodro.domain.usecase.task.CompleteTask
+import com.escodro.domain.usecase.task.DeleteTask
+import com.escodro.domain.usecase.task.LoadTask
+import com.escodro.domain.usecase.task.UncompleteTask
+import com.escodro.domain.usecase.task.UpdateTask
+import com.escodro.domain.usecase.task.UpdateTaskCategory
+import com.escodro.domain.usecase.task.UpdateTaskDescription
+import com.escodro.domain.usecase.task.UpdateTaskStatus
+import com.escodro.domain.usecase.task.UpdateTaskTitle
+import com.escodro.domain.usecase.task.implementation.AddTaskImpl
+import com.escodro.domain.usecase.task.implementation.LoadTaskImpl
+import com.escodro.domain.usecase.task.implementation.UpdateTaskCategoryImpl
+import com.escodro.domain.usecase.task.implementation.UpdateTaskDescriptionImpl
+import com.escodro.domain.usecase.task.implementation.UpdateTaskImpl
+import com.escodro.domain.usecase.task.implementation.UpdateTaskStatusImpl
+import com.escodro.domain.usecase.task.implementation.UpdateTaskTitleImpl
+import com.escodro.domain.usecase.taskwithcategory.LoadCompletedTasks
+import com.escodro.domain.usecase.taskwithcategory.LoadUncompletedTasks
+import com.escodro.domain.usecase.taskwithcategory.implementation.LoadUncompletedTasksImpl
+import com.escodro.domain.usecase.tracker.LoadCompletedTasksByPeriod
+import com.escodro.domain.usecase.tracker.implementation.LoadCompletedTasksByPeriodImpl
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
+
+/**
+ * Domain dependency injection module.
+ */
+<span class="nc" id="L60">val domainModule = module {</span>
+
+    // Task Use Cases
+<span class="nc" id="L63">    factory&lt;AddTask&gt; {</span>
+<span class="nc" id="L64">        AddTaskImpl(</span>
+<span class="nc" id="L65">            taskRepository = get(),</span>
+<span class="nc" id="L66">            updateAlarm = get(),</span>
+<span class="nc" id="L67">            glanceInteractor = getOrNull(),</span>
+<span class="nc" id="L68">        )</span>
+    }
+<span class="nc" id="L70">    factoryOf(::CompleteTask)</span>
+<span class="nc" id="L71">    factoryOf(::UncompleteTask)</span>
+<span class="nc" id="L72">    factory&lt;UpdateTaskStatus&gt; {</span>
+<span class="nc" id="L73">        UpdateTaskStatusImpl(</span>
+<span class="nc" id="L74">            taskRepository = get(),</span>
+<span class="nc" id="L75">            glanceInteractor = getOrNull(),</span>
+<span class="nc" id="L76">            completeTask = get(),</span>
+<span class="nc" id="L77">            uncompleteTask = get(),</span>
+<span class="nc" id="L78">        )</span>
+    }
+<span class="nc" id="L80">    factory { DeleteTask(taskRepository = get(), alarmInteractor = getOrNull()) }</span>
+<span class="nc" id="L81">    factoryOf(::LoadTaskImpl) bind LoadTask::class</span>
+<span class="nc" id="L82">    factory&lt;UpdateTask&gt; { UpdateTaskImpl(taskRepository = get(), glanceInteractor = getOrNull()) }</span>
+<span class="nc" id="L83">    factory&lt;UpdateTaskTitle&gt; {</span>
+<span class="nc" id="L84">        UpdateTaskTitleImpl(</span>
+<span class="nc" id="L85">            loadTask = get(),</span>
+<span class="nc" id="L86">            updateTask = get(),</span>
+<span class="nc" id="L87">            alarmInteractor = get(),</span>
+<span class="nc" id="L88">            glanceInteractor = getOrNull(),</span>
+<span class="nc" id="L89">        )</span>
+    }
+<span class="nc" id="L91">    factoryOf(::UpdateTaskDescriptionImpl) bind UpdateTaskDescription::class</span>
+<span class="nc" id="L92">    factoryOf(::UpdateTaskCategoryImpl) bind UpdateTaskCategory::class</span>
+
+    // Category Use Cases
+<span class="nc" id="L95">    factoryOf(::DeleteCategoryImpl) bind DeleteCategory::class</span>
+<span class="nc" id="L96">    factoryOf(::LoadAllCategoriesImpl) bind LoadAllCategories::class</span>
+<span class="nc" id="L97">    factoryOf(::LoadCategoryImpl) bind LoadCategory::class</span>
+<span class="nc" id="L98">    factoryOf(::AddCategoryImpl) bind AddCategory::class</span>
+<span class="nc" id="L99">    factoryOf(::UpdateCategoryImpl) bind UpdateCategory::class</span>
+
+    // Search Use Cases
+<span class="nc" id="L102">    factoryOf(::SearchTasksByNameImpl) bind SearchTasksByName::class</span>
+
+    // Task With Category Use Cases
+<span class="nc" id="L105">    factoryOf(::LoadCompletedTasks)</span>
+<span class="nc" id="L106">    factoryOf(::LoadUncompletedTasksImpl) bind LoadUncompletedTasks::class</span>
+
+    // Alarm Use Cases
+<span class="nc" id="L109">    factoryOf(::CancelAlarmImpl) bind CancelAlarm::class</span>
+<span class="nc" id="L110">    factoryOf(::RescheduleFutureAlarms)</span>
+<span class="nc" id="L111">    factoryOf(::ScheduleAlarmImpl) bind ScheduleAlarm::class</span>
+<span class="nc" id="L112">    factoryOf(::ScheduleNextAlarm)</span>
+<span class="nc" id="L113">    factoryOf(::ShowAlarm)</span>
+<span class="nc" id="L114">    factoryOf(::SnoozeAlarm)</span>
+<span class="nc" id="L115">    factoryOf(::UpdateTaskAsRepeatingImpl) bind UpdateTaskAsRepeating::class</span>
+<span class="nc" id="L116">    factoryOf(::UpdateAlarmImpl) bind UpdateAlarm::class</span>
+
+    // Tracker Use Cases
+<span class="nc" id="L119">    factoryOf(::LoadCompletedTasksByPeriodImpl) bind LoadCompletedTasksByPeriod::class</span>
+
+    // Preferences Use Cases
+<span class="nc" id="L122">    factoryOf(::UpdateAppTheme)</span>
+<span class="nc" id="L123">    factoryOf(::LoadAppTheme)</span>
+
+    // Providers
+<span class="nc" id="L126">    factoryOf(::DateTimeProviderImpl) bind DateTimeProvider::class</span>
+<span class="nc" id="L127">}</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

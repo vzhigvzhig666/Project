@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoadAppTheme.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">domain</a> &gt; <a href="index.source.html" class="el_package">com.escodro.domain.usecase.preferences</a> &gt; <span class="el_source">LoadAppTheme.kt</span></div><h1>LoadAppTheme.kt</h1><pre class="source lang-java linenums">package com.escodro.domain.usecase.preferences
+
+import com.escodro.domain.model.AppThemeOptions
+import kotlinx.coroutines.flow.Flow
+
+/**
+ * Loads the current app theme.
+ *
+ * @param preferencesRepository the preferences repository
+ */
+<span class="fc" id="L11">class LoadAppTheme(private val preferencesRepository: PreferencesRepository) {</span>
+
+    /**
+     * Loads the current app theme.
+     *
+     * @return flow of [AppThemeOptions]
+     */
+    operator fun invoke(): Flow&lt;AppThemeOptions&gt; =
+<span class="fc" id="L19">        preferencesRepository.loadAppTheme()</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
