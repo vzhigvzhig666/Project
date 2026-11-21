@@ -1,4 +1,5 @@
 include(":app")
+include(":api-tests")
 include(":desktop-app")
 include(":features:alarm-api")
 include(":features:alarm")
@@ -30,10 +31,9 @@ include(":features:home")
 
 pluginManagement {
     repositories {
-        maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        gradlePluginPortal()
         mavenCentral()
         google()
+        gradlePluginPortal()
         includeBuild("plugins")
     }
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoadCompletedTasksByPeriodImpl.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">domain</a> &gt; <a href="index.source.html" class="el_package">com.escodro.domain.usecase.tracker.implementation</a> &gt; <span class="el_source">LoadCompletedTasksByPeriodImpl.kt</span></div><h1>LoadCompletedTasksByPeriodImpl.kt</h1><pre class="source lang-java linenums">package com.escodro.domain.usecase.tracker.implementation
+
+import com.escodro.domain.model.TaskWithCategory
+import com.escodro.domain.repository.TaskWithCategoryRepository
+import com.escodro.domain.usecase.tracker.LoadCompletedTasksByPeriod
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlin.time.Clock
+import kotlin.time.Duration.Companion.days
+import kotlin.time.ExperimentalTime
+
+/**
+ * Use case to get completed tasks in Tracker format for the last month from the database.
+ */
+<span class="fc" id="L17">@OptIn(ExperimentalTime::class)</span>
+<span class="fc" id="L18">internal class LoadCompletedTasksByPeriodImpl(</span>
+<span class="fc" id="L19">    private val repository: TaskWithCategoryRepository,</span>
+) : LoadCompletedTasksByPeriod {
+
+    /**
+     * Gets completed tasks in Tracker format for the last month.
+     */
+    override operator fun invoke(): Flow&lt;List&lt;TaskWithCategory&gt;&gt; =
+<span class="fc" id="L26">        repository</span>
+<span class="fc" id="L27">            .findAllTasksWithCategory()</span>
+<span class="fc" id="L28">            .map { list -&gt;</span>
+<span class="fc" id="L29">                list</span>
+<span class="fc" id="L30">                    .filter { item -&gt; item.task.isCompleted }</span>
+<span class="fc" id="L31">                    .filter(::filterByLastMonth)</span>
+<span class="fc" id="L32">            }</span>
+
+    private fun filterByLastMonth(task: TaskWithCategory): Boolean {
+<span class="fc" id="L35">        val lastMonth = Clock.System.now().minus(LAST_30_DAYS.days)</span>
+<span class="fc" id="L36">        val taskDate =</span>
+<span class="pc bpc" id="L37" title="2 of 4 branches missed.">            task.task.completedDate?.toInstant(TimeZone.currentSystemDefault()) ?: return false</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">        return taskDate &gt; lastMonth</span>
+    }
+
+    companion object {
+        private const val LAST_30_DAYS = 30
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

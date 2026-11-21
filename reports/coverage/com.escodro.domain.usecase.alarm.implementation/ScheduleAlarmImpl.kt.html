@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ScheduleAlarmImpl.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">domain</a> &gt; <a href="index.source.html" class="el_package">com.escodro.domain.usecase.alarm.implementation</a> &gt; <span class="el_source">ScheduleAlarmImpl.kt</span></div><h1>ScheduleAlarmImpl.kt</h1><pre class="source lang-java linenums">package com.escodro.domain.usecase.alarm.implementation
+
+import com.escodro.domain.interactor.AlarmInteractor
+import com.escodro.domain.repository.TaskRepository
+import com.escodro.domain.usecase.alarm.ScheduleAlarm
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlin.time.ExperimentalTime
+
+<span class="fc" id="L11">@OptIn(ExperimentalTime::class)</span>
+<span class="fc" id="L12">internal class ScheduleAlarmImpl(</span>
+<span class="fc" id="L13">    private val taskRepository: TaskRepository,</span>
+<span class="fc" id="L14">    private val alarmInteractor: AlarmInteractor,</span>
+) : ScheduleAlarm {
+
+    /**
+     * Schedules a new alarm.
+     *
+     * @param taskId the alarm id
+     * @param localDateTime the time to the alarm be scheduled
+     */
+    override suspend operator fun invoke(taskId: Long, localDateTime: LocalDateTime) {
+<span class="pc bpc" id="L24" title="1 of 2 branches missed.">        val task = taskRepository.findTaskById(taskId) ?: return</span>
+<span class="fc" id="L25">        val updatedTask = task.copy(dueDate = localDateTime)</span>
+<span class="fc" id="L26">        taskRepository.updateTask(updatedTask)</span>
+
+<span class="fc" id="L28">        alarmInteractor.schedule(</span>
+<span class="fc" id="L29">            task,</span>
+<span class="fc" id="L30">            localDateTime.toInstant(TimeZone.currentSystemDefault()).toEpochMilliseconds(),</span>
+        )
+<span class="fc" id="L32">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

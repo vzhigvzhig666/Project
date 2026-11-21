@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CompleteTask.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">domain</a> &gt; <a href="index.source.html" class="el_package">com.escodro.domain.usecase.task</a> &gt; <span class="el_source">CompleteTask.kt</span></div><h1>CompleteTask.kt</h1><pre class="source lang-java linenums">package com.escodro.domain.usecase.task
+
+import com.escodro.domain.interactor.AlarmInteractor
+import com.escodro.domain.interactor.NotificationInteractor
+import com.escodro.domain.model.Task
+import com.escodro.domain.provider.DateTimeProvider
+import com.escodro.domain.repository.TaskRepository
+
+/**
+ * Use case to set a task as completed in the database.
+ */
+<span class="fc" id="L12">class CompleteTask(</span>
+<span class="fc" id="L13">    private val taskRepository: TaskRepository,</span>
+<span class="fc" id="L14">    private val alarmInteractor: AlarmInteractor,</span>
+<span class="fc" id="L15">    private val notificationInteractor: NotificationInteractor,</span>
+<span class="fc" id="L16">    private val dateTimeProvider: DateTimeProvider,</span>
+) {
+
+    /**
+     * Completes the given task.
+     *
+     * @param taskId the task id
+     *
+     * @return observable to be subscribe
+     */
+    suspend operator fun invoke(taskId: Long) {
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">        val task = taskRepository.findTaskById(taskId) ?: return</span>
+<span class="fc" id="L28">        invoke(task)</span>
+<span class="fc" id="L29">    }</span>
+
+    /**
+     * Completes the given task.
+     *
+     * @param task the task to be updated
+     *
+     * @return observable to be subscribe
+     */
+    suspend operator fun invoke(task: Task) {
+<span class="fc" id="L39">        val updatedTask = updateTaskAsCompleted(task)</span>
+<span class="fc" id="L40">        taskRepository.updateTask(updatedTask)</span>
+<span class="fc" id="L41">        alarmInteractor.cancel(task)</span>
+<span class="fc" id="L42">        notificationInteractor.dismiss(task)</span>
+<span class="fc" id="L43">    }</span>
+
+    private fun updateTaskAsCompleted(task: Task) =
+<span class="fc" id="L46">        task.copy(isCompleted = true, completedDate = dateTimeProvider.getCurrentLocalDateTime())</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

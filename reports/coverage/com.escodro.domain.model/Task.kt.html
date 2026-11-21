@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ru"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Task.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">domain</a> &gt; <a href="index.source.html" class="el_package">com.escodro.domain.model</a> &gt; <span class="el_source">Task.kt</span></div><h1>Task.kt</h1><pre class="source lang-java linenums">package com.escodro.domain.model
+
+import kotlinx.datetime.LocalDateTime
+
+/**
+ * Data class to represent a Task.
+ *
+ * @property id unique task id
+ * @property isCompleted indicates if the task is completed
+ * @property title the task title
+ * @property description the task description
+ * @property categoryId the associated category id
+ * @property dueDate the due date to the task be notified
+ * @property creationDate the date of creation of the task
+ * @property completedDate the date of completion of the task
+ * @property isRepeating indicates if the task is repeating
+ * @property alarmInterval the interval between the repeating
+ */
+<span class="fc" id="L19">data class Task(</span>
+<span class="fc" id="L20">    val id: Long = 0,</span>
+<span class="fc" id="L21">    val isCompleted: Boolean = false,</span>
+<span class="fc" id="L22">    val title: String,</span>
+<span class="fc" id="L23">    val description: String? = null,</span>
+<span class="fc" id="L24">    val categoryId: Long? = null,</span>
+<span class="fc" id="L25">    val dueDate: LocalDateTime? = null,</span>
+<span class="pc" id="L26">    val creationDate: LocalDateTime? = null,</span>
+<span class="fc" id="L27">    val completedDate: LocalDateTime? = null,</span>
+<span class="fc" id="L28">    val isRepeating: Boolean = false,</span>
+<span class="fc" id="L29">    val alarmInterval: AlarmInterval? = null,</span>
+<span class="fc" id="L30">)</span>
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>
